@@ -7,7 +7,6 @@ export default function Home() {
   const mapDiv = useRef(null);
 
   useEffect(()=>{
-    esriConfig.apiKey= "AAPK1dca06ceb44043debc84e9bfc1580b1b1a61Lr3F5NsxNxILpVrKwys7GlyPD1m9CDKoDK1Y6-Cht5QPYrMmMLX0pu0-DjLU"
     
 
   
@@ -16,7 +15,7 @@ export default function Home() {
        * Initialize application
        */
       const webmap = new Map({
-        basemap: "dark-gray-vector"
+        basemap: "topo"
       });
 
       const view = new MapView({
