@@ -2,6 +2,8 @@
 import Map from '@arcgis/core/Map.js';
 import MapView from '@arcgis/core/views/MapView.js';
 import esriConfig  from '@arcgis/core/config';
+import GraphicsLayer from '@arcgis/core/layers/GraphicsLayer.js';
+import Graphic from '@arcgis/core/Graphic'
 import { useEffect, useRef } from 'react';
 export default function Home() {
   const mapDiv = useRef(null);
@@ -14,6 +16,25 @@ export default function Home() {
       /**
        * Initialize application
        */
+      const graphicsLayer = new GraphicsLayer();
+
+
+
+
+
+ const point = { //Create a point
+  type: "point",
+  longitude: 11.928490,
+  latitude: 44.7353
+};
+const simpleMarkerSymbol = {
+  type: "simple-marker",
+  color: [226, 119, 40],  // Orange
+  outline: {
+      color: [255, 255, 255], // White
+      width: 1
+  }
+};
       const webmap = new Map({
         basemap: "topo"
       });
@@ -21,10 +42,15 @@ export default function Home() {
       const view = new MapView({
         container: mapDiv.current, // The id or node representing the DOM element containing the view.
         map: webmap, // An instance of a Map object to display in the view.
-        center: [-117.1490,32.7353],
-        scale: 10000000 // Represents the map scale at the center of the view.
+        center: [11.928490,44.7353],
+        scale: 100000 // Represents the map scale at the center of the view.
       });
-
+ webmap.add(graphicsLayer);
+ const pointGraphic = new Graphic({
+  geometry: point,
+  symbol: simpleMarkerSymbol
+});
+graphicsLayer.add(pointGraphic);
       return () => view && view.destroy()
     }
   },[])
