@@ -1,9 +1,11 @@
 "use client";
+import "@arcgis/core/assets/esri/themes/light/main.css";
 import Map from "@arcgis/core/Map.js";
 import MapView from "@arcgis/core/views/MapView.js";
 import esriConfig from "@arcgis/core/config";
 import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import Graphic from "@arcgis/core/Graphic";
+import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import { useEffect, useRef } from "react";
 export default function Home() {
   const mapDiv = useRef(null);
@@ -15,6 +17,55 @@ export default function Home() {
        */
       const graphicsLayer = new GraphicsLayer();
 
+      const labelClass = {
+        // autocasts as new LabelClass()
+        symbol: {
+          type: "text", // autocasts as new TextSymbol()
+          color: "white",
+          haloColor: "black",
+          haloSize: 1,
+          font: {
+            // autocast as new Font()
+            family: "Noto Sans",
+            size: 14,
+          },
+        },
+        labelPlacement: "above-right",
+        labelExpressionInfo: {
+          expression: "$feature.Denominazione__Italiana_e_stran",
+        },
+        maxScale: 0,
+        minScale: 220000,
+      };
+      const featureLayer = new FeatureLayer({
+        url: "https://services.arcgis.com/RL4g2ycRCRI9aQRK/arcgis/rest/services/ComuniItaliani_WFL1/FeatureServer",
+        labelingInfo: [labelClass],
+      });
+
+      const template = {
+        // autocasts as new PopupTemplate()
+        title: "Comuni italiani",
+        content: [
+          {
+            type: "fields",
+            fieldInfos: [
+              {
+                fieldName: "Denominazione__Italiana_e_stran",
+                label: "Nome del comune",
+              },
+              {
+                fieldName: "Superficie_territoriale__kmq__a",
+                label: "Superficie",
+              },
+              {
+                fieldName: "Popolazione_residente_al_31_12_",
+                label: "Popolazione",
+              },
+            ],
+          },
+        ],
+      };
+      featureLayer.popupTemplate = template;
       const point = {
         //Create a point
         type: "point",
@@ -35,9 +86,9 @@ export default function Home() {
         type: "polyline",
         paths: [
           [11.60649, 44.8657], //Longitude, latitude
-          [11.60649, 30.8657], //Longitude, latitude
-          [22.60649, 30.8657], //Longitude, latitude
-          [22.60649, 44.8657], //Longitude, latitude
+          [11.60649, 40.8657], //Longitude, latitude
+          [15.60649, 40.8657], //Longitude, latitude
+          [15.60649, 44.8657], //Longitude, latitude
           [11.60649, 44.8657], //Longitude, latitude
         ],
       };
@@ -54,14 +105,15 @@ export default function Home() {
 
       const webmap = new Map({
         basemap: "topo",
+        layers: [featureLayer],
       });
       const polygon = {
         type: "polygon",
         rings: [
           [11.60649, 44.8657], //Longitude, latitude
-          [11.60649, 30.8657], //Longitude, latitude
-          [22.60649, 30.8657], //Longitude, latitude
-          [22.60649, 44.8657], //Longitude, latitude
+          [11.60649, 40.8657], //Longitude, latitude
+          [15.60649, 40.8657], //Longitude, latitude
+          [15.60649, 44.8657], //Longitude, latitude
           [11.60649, 44.8657], //Longitude, latitude
         ],
       };
