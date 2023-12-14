@@ -7,6 +7,8 @@ import GraphicsLayer from "@arcgis/core/layers/GraphicsLayer.js";
 import Graphic from "@arcgis/core/Graphic";
 import FeatureLayer from "@arcgis/core/layers/FeatureLayer";
 import { useEffect, useRef } from "react";
+import Search from "@arcgis/core/widgets/Search.js";
+
 export default function Home() {
   const mapDiv = useRef(null);
 
@@ -120,7 +122,7 @@ export default function Home() {
 
       const simpleFillSymbol = {
         type: "simple-fill",
-        color: [227, 139, 79, 0.8], // Orange, opacity 80%
+        color: [27, 19, 79, 0.8], // Orange, opacity 80%
         outline: {
           color: [255, 255, 255],
           width: 1,
@@ -138,7 +140,12 @@ export default function Home() {
         center: [11.60849, 44.8653],
         scale: 100000, // Represents the map scale at the center of the view.
       });
-
+      var searchWidget = new Search({
+        view: view,
+      });
+      view.ui.add(searchWidget, {
+        position: "top-right",
+      });
       const pointGraphic = new Graphic({
         geometry: point,
         symbol: simpleMarkerSymbol,
@@ -148,8 +155,11 @@ export default function Home() {
       graphicsLayer.add(polylineGraphic);
       graphicsLayer.add(polygonGraphic);
       webmap.add(graphicsLayer);
+      // view.navigation.momentumEnabled = false; the map keeps moving after the click of the mouse - enabled by default
       return () => view && view.destroy();
     }
+
+    // Add the search widget to the top right corner of the view
   }, []);
 
   return (
