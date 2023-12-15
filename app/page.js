@@ -13,6 +13,7 @@ import DotDensityRenderer from "@arcgis/core/renderers/DotDensityRenderer";
 import Legend from "@arcgis/core/widgets/Legend";
 import Expand from "@arcgis/core/widgets/Expand";
 import Bookmarks from "@arcgis/core/widgets/Bookmarks";
+import ScaleBar from "@arcgis/core/widgets/ScaleBar.js";
 
 export default function Home() {
   const mapDiv = useRef(null);
@@ -217,7 +218,13 @@ export default function Home() {
         ],
         "bottom-left"
       );
-
+      let scaleBar = new ScaleBar({
+        view: view,
+      });
+      // Add widget to the bottom left corner of the view
+      view.ui.add(scaleBar, {
+        position: "bottom-right",
+      });
       webmap.add(graphicsLayer);
       // view.navigation.momentumEnabled = false; the map keeps moving after the click of the mouse - enabled by default
       return () => view && view.destroy();
